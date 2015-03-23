@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+    <title>Multi-parent graph question</title>
+
+    <link rel="stylesheet" href="/bower/bootstrap/dist/css/bootstrap.css"/>
+
+    <script type="text/javascript" src="/bower/angular/angular.js"></script>
+    <script type="text/javascript" src="/bower/underscore/underscore.js"></script>
+
+    <script type="text/javascript" src="/bower/angular-growl-v2/build/angular-growl.js"></script>
+    <link rel="stylesheet" href="/bower/angular-growl-v2/build/angular-growl.css"/>
+
+    <script type="text/javascript" src="/js/ng-app.js"></script>
+</head>
+<body ng-app="ng-app">
+<div growl></div>
+<div class="container" style="margin-top: 20px;" ng-controller="MainController">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Multi-parent graph question</a>
+            </div>
+        </div>
+    </nav>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 ">
+            <div ng-if="currentQuestion" class="well well-lg">
+                <div class="row">
+                    <div class="col-md-12">{{currentQuestion.question}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div ng-repeat="answer in currentQuestion.answers">
+                            <button ng-click="doAnswer(currentQuestion.id, answer)">
+                                {{answer.answer}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row well well-sm" ng-repeat="answer in answers">
+                <div class="col-md-12">
+                    <div>Q.: {{answer.question.question}}</div>
+                    <div>A.: {{answer.answer}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
