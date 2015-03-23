@@ -1,17 +1,23 @@
 <!doctype html>
 <html>
 <head>
-    <title>Multi-parent graph question</title>
+    <title>Опросник</title>
+
+    <meta charset="UTF-8">
 
     <link rel="stylesheet" href="bower/bootstrap/dist/css/bootstrap.css"/>
 
-    <script type="text/javascript" src="bower/angular/angular.js"></script>
-    <script type="text/javascript" src="bower/underscore/underscore.js"></script>
+    <script type="text/javascript" src="bower/angular/angular.min.js"></script>
 
-    <script type="text/javascript" src="bower/cytoscape/dist/cytoscape.js"></script>
+    <script type="text/javascript" src="bower/ngprogress/build/ngProgress.min.js"></script>
+    <link rel="stylesheet" href="bower/ngprogress/ngProgress.css"/>
 
-    <script type="text/javascript" src="bower/angular-growl-v2/build/angular-growl.js"></script>
-    <link rel="stylesheet" href="bower/angular-growl-v2/build/angular-growl.css"/>
+    <script type="text/javascript" src="bower/underscore/underscore-min.js"></script>
+
+    <script type="text/javascript" src="bower/cytoscape/dist/cytoscape.min.js"></script>
+
+    <script type="text/javascript" src="bower/angular-growl-v2/build/angular-growl.min.js"></script>
+    <link rel="stylesheet" href="bower/angular-growl-v2/build/angular-growl.min.css"/>
 
     <script type="text/javascript" src="js/questions.js"></script>
     <script type="text/javascript" src="js/ng-app.js"></script>
@@ -22,7 +28,9 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="/">Multi-parent graph question</a>
+                <a class="navbar-brand" href="/">
+                    Опросник на основе графа с несколькими родительскими узлами
+                </a>
             </div>
         </div>
     </nav>
@@ -33,14 +41,14 @@
                     <div class="row" style="margin-bottom: 10px">
                         <div class="col-md-6">
                             <input type="checkbox" id="show-answers" ng-model="showAnswers"/>
-                            <label for="show-answers">Show my answers</label>
+                            <label for="show-answers">Отображать мои ответы</label>
                             <br/>
                             <input type="checkbox" id="show-graph" ng-model="showGraph"/>
-                            <label for="show-graph">Show graph</label>
+                            <label for="show-graph">Отобразить граф</label>
                         </div>
                         <div class="col-md-6 pull-right" style="text-align: right; padding-top: 10px;">
                             <button ng-click="restart(true)" class="btn btn-warning btn-sm">
-                                Restart
+                                Перезапустить
                             </button>
                         </div>
                     </div>

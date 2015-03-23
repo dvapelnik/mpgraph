@@ -1,4 +1,4 @@
-(function (angular, undercore, cy) {
+(function (angular, undercore, cytoscape) {
   angular.module('underscore', [])
     .factory('_', function () {
       return undercore;
@@ -9,11 +9,26 @@
       return cytoscape
     });
 
-  angular.module('ng-app', ['underscore', 'angular-growl', 'cytoscape'])
+  angular.module('ng-app', ['underscore', 'angular-growl', 'cytoscape', 'ngProgress'])
     .config(['growlProvider', function (growlProvider) {
       growlProvider.globalReversedOrder(true);
       growlProvider.globalTimeToLive(3000);
     }])
+    .run(function ($rootScope, ngProgress, $http) {
+      ngProgress.color('#d43f3a');
+      ngProgress.height('2px');
+
+      $http.defaults.transformRequest.push(function (data) {
+        ngProgress.start();
+
+        return data;
+      });
+      $http.defaults.transformResponse.push(function (data) {
+        ngProgress.complete();
+
+        return data;
+      });
+    })
     .controller('MainController', function ($scope, $http, growl, _, cy) {
       $scope.showAnswers = true;
       $scope.showGraph = true;
@@ -30,7 +45,7 @@
           if (newValue === undefined) {
             var resultId = $scope.answers[$scope.answers.length - 1].getResult().id;
             cyObject.edges("[id='q" + oldValue.id + "-r" + resultId + "']").addClass('highlighted');
-            cyObject.elements("[id='r" + resultId + "']").css({'background-color': 'brown'});
+            cyObject.elements("[id='r" + resultId + "']").css({'background-color': '#f0ad4e'});
           }
 
           if (oldValue !== undefined && newValue !== undefined) {
@@ -86,54 +101,46 @@
           cyConfig.elements.nodes.push({
             data: {id: 'r' + result.id},
             css: {
-              'background-color': '#d9534f'
+              'background-color': 'brown'
             },
             renderedPosition: result.position
           });
         });
+
         _.each($scope.questionList.list, function (question, index) {
           cyConfig.elements.nodes.push({
             data: {id: 'q' + question.id},
             renderedPosition: question.position,
             classes: index === 0 ? 'highlighted' : ''
           });
-          if (_.all(question.answers, function (answer) {
-              return answer.getNextQuestion() !== undefined;
-            })) {
-            _.each(question.answers, function (answer) {
-              cyConfig.elements.edges.push({
-                data: {
-                  id: 'q' + answer.getQuestion().id + '-q' + answer.getNextQuestion().id,
-                  source: 'q' + answer.getQuestion().id,
-                  target: 'q' + answer.getNextQuestion().id
-                },
-                css: {
-                  'line-color': answer.isPositive ? '#5cb85c' : '#d9534f',
-                  'target-arrow-color': answer.isPositive ? '#5cb85c' : '#d9534f'
-                }
-              });
+
+          var isNotLastAnswer = _.all(question.answers, function (answer) {
+            return answer.getNextQuestion() !== undefined;
+          });
+
+          _.each(question.answers, function (answer) {
+            var sourceId = 'q' + answer.getQuestion().id;
+            var targetId = isNotLastAnswer ?
+              ('q' + answer.getNextQuestion().id) :
+              ('r' + answer.getResult().id);
+            cyConfig.elements.edges.push({
+              data: {
+                id: sourceId + '-' + targetId,
+                source: sourceId,
+                target: targetId
+              },
+              css: {
+                'line-color': answer.isPositive ? '#5cb85c' : '#d9534f',
+                'target-arrow-color': answer.isPositive ? '#5cb85c' : '#d9534f'
+              }
             });
-          } else {
-            _.each(question.answers, function (answer) {
-              cyConfig.elements.edges.push({
-                data: {
-                  id: 'q' + answer.getQuestion().id + '-r' + answer.getResult().id,
-                  source: 'q' + answer.getQuestion().id,
-                  target: 'r' + answer.getResult().id
-                },
-                css: {
-                  'line-color': answer.isPositive ? '#5cb85c' : '#d9534f',
-                  'target-arrow-color': answer.isPositive ? '#5cb85c' : '#d9534f'
-                }
-              });
-            });
-          }
+          });
         });
 
         cyObject = cy(cyConfig);
 
         if (withMessage) {
-          growl.success('Restarted');
+          growl.success('Перезапущено');
         }
       };
 
@@ -153,7 +160,7 @@
             $scope.restart();
           })
           .error(function (data) {
-            growl.error('Cannot retrieve data with AJAX-request');
+            growl.error('Не получилось получить данные для опросника');
           });
       }
 
@@ -222,4 +229,4 @@
       }
     });
 })
-(window.angular, window._, window.cy);
+(window.angular, window._, window.cytoscape);

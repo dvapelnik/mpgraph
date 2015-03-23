@@ -21,6 +21,7 @@
     "bootstrap": "~3.3.4",
     "underscore": "~1.8.2",
     "angular-growl-v2": "~0.7.3",
-    "cytoscape": "~2.3.10"
+    "cytoscape": "~2.3.10",
+    "ngprogress": "~1.0.7"
   }
 }
