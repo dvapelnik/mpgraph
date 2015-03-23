@@ -1,4 +1,4 @@
-{
+var data = {
   "questions": [
     {
       "id": 0,
@@ -7,13 +7,13 @@
         {
           "id": 0,
           "answer": "+",
-          "conclusion": "_+",
+          "isPositive": true,
           "nextQuestionId": 1
         },
         {
           "id": 1,
           "answer": "-",
-          "conclusion": "_-",
+          "isPositive": false,
           "nextQuestionId": 2
         }
       ]
@@ -25,13 +25,13 @@
         {
           "id": 2,
           "answer": "++",
-          "conclusion": "_++",
+          "isPositive": true,
           "nextQuestionId": 3
         },
         {
           "id": 3,
           "answer": "+-",
-          "conclusion": "_+-",
+          "isPositive": false,
           "nextQuestionId": 4
         }
       ]
@@ -43,13 +43,13 @@
         {
           "id": 4,
           "answer": "+-",
-          "conclusion": "_+-",
+          "isPositive": true,
           "nextQuestionId": 5
         },
         {
           "id": 5,
           "answer": "--",
-          "conclusion": "_--",
+          "isPositive": false,
           "nextQuestionId": 6
         }
       ]
@@ -61,13 +61,13 @@
         {
           "id": 6,
           "answer": "+-",
-          "conclusion": "_+-",
+          "isPositive": true,
           "nextQuestionId": 7
         },
         {
           "id": 7,
           "answer": "--",
-          "conclusion": "_--",
+          "isPositive": false,
           "nextQuestionId": 8
         }
       ]
@@ -79,13 +79,13 @@
         {
           "id": 8,
           "answer": "+-",
-          "conclusion": "_+-",
+          "isPositive": true,
           "nextQuestionId": 9
         },
         {
           "id": 9,
           "answer": "--",
-          "conclusion": "_--",
+          "isPositive": false,
           "nextQuestionId": 10
         }
       ]
@@ -97,13 +97,13 @@
         {
           "id": 10,
           "answer": "+-",
-          "conclusion": "_+-",
+          "isPositive": true,
           "nextQuestionId": 11
         },
         {
           "id": 11,
           "answer": "--",
-          "conclusion": "_--",
+          "isPositive": false,
           "nextQuestionId": 12
         }
       ]
@@ -115,13 +115,13 @@
         {
           "id": 12,
           "answer": "+-",
-          "conclusion": "_+-",
+          "isPositive": true,
           "nextQuestionId": 13
         },
         {
           "id": 13,
           "answer": "--",
-          "conclusion": "_--",
+          "isPositive": false,
           "nextQuestionId": 14
         }
       ]
@@ -133,13 +133,13 @@
         {
           "id": 14,
           "answer": "+-",
-          "conclusion": "_+-",
+          "isPositive": true,
           "resultId": 0
         },
         {
           "id": 15,
           "answer": "--",
-          "conclusion": "_--",
+          "isPositive": false,
           "resultId": 1
         }
       ]
@@ -151,13 +151,13 @@
         {
           "id": 16,
           "answer": "+-",
-          "conclusion": "_+-",
+          "isPositive": true,
           "resultId": 2
         },
         {
           "id": 17,
           "answer": "--",
-          "conclusion": "_--",
+          "isPositive": false,
           "resultId": 3
         }
       ]
@@ -169,13 +169,13 @@
         {
           "id": 18,
           "answer": "+-",
-          "conclusion": "_+-",
+          "isPositive": true,
           "resultId": 4
         },
         {
           "id": 19,
           "answer": "--",
-          "conclusion": "_--",
+          "isPositive": false,
           "resultId": 5
         }
       ]
@@ -187,13 +187,13 @@
         {
           "id": 20,
           "answer": "+-",
-          "conclusion": "_+-",
+          "isPositive": true,
           "resultId": 6
         },
         {
           "id": 21,
           "answer": "--",
-          "conclusion": "_--",
+          "isPositive": false,
           "resultId": 7
         }
       ]
@@ -205,13 +205,13 @@
         {
           "id": 22,
           "answer": "+-",
-          "conclusion": "_+-",
+          "isPositive": true,
           "resultId": 8
         },
         {
           "id": 23,
           "answer": "--",
-          "conclusion": "_--",
+          "isPositive": false,
           "resultId": 9
         }
       ]
@@ -223,13 +223,13 @@
         {
           "id": 24,
           "answer": "+-",
-          "conclusion": "_+-",
+          "isPositive": true,
           "resultId": 10
         },
         {
           "id": 25,
           "answer": "--",
-          "conclusion": "_--",
+          "isPositive": false,
           "resultId": 11
         }
       ]
@@ -241,13 +241,13 @@
         {
           "id": 26,
           "answer": "+-",
-          "conclusion": "_+-",
+          "isPositive": true,
           "resultId": 12
         },
         {
           "id": 27,
           "answer": "--",
-          "conclusion": "_--",
+          "isPositive": false,
           "resultId": 13
         }
       ]
@@ -259,13 +259,13 @@
         {
           "id": 28,
           "answer": "+-",
-          "conclusion": "_+-",
+          "isPositive": true,
           "resultId": 14
         },
         {
           "id": 29,
           "answer": "--",
-          "conclusion": "_--",
+          "isPositive": false,
           "resultId": 15
         }
       ]
@@ -337,4 +337,4 @@
       "result": "Result 15"
     }
   ]
-}
+};

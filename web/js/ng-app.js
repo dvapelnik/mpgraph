@@ -5,6 +5,10 @@
     });
 
   angular.module('ng-app', ['underscore', 'angular-growl'])
+    .config(['growlProvider', function (growlProvider) {
+      growlProvider.globalReversedOrder(true);
+      growlProvider.globalTimeToLive(3000);
+    }])
     .controller('MainController', function ($scope, $http, growl, _) {
       $scope.questionList = undefined;
       $scope.currentQuestion = undefined;
@@ -17,6 +21,17 @@
         return lastAnswer && lastAnswer.resultId ? _.findWhere(results, {id: lastAnswer.resultId}) : false;
       };
 
+      $scope.restart = function (withMessage) {
+        withMessage = withMessage || false;
+
+        $scope.answers = [];
+        $scope.currentQuestion = $scope.questionList.getStartQuestion();
+
+        if (withMessage) {
+          growl.success('Restarted');
+        }
+      };
+
       $scope.doAnswer = function (questionId, answer) {
         $scope.currentQuestion.answer = answer;
         $scope.answers.push(answer);
@@ -26,17 +41,9 @@
       generateQuestionList();
 
       function generateQuestionList() {
-        $http.get('/data/questions.json')
-          .success(function (data, status, headers, config) {
-            $scope.questionList = new QuestionList(data);
-            $scope.currentQuestion = $scope.questionList.getStartQuestion();
-            results = data.results;
-          })
-          .error(function (data, status, headers, config) {
-            growl.error('Cannot retrieve questions', {
-              title: 'Error!'
-            })
-          });
+        $scope.questionList = new QuestionList(data);
+        $scope.restart();
+        results = data.results;
       }
 
       function QuestionList(questionsData) {
@@ -80,9 +87,9 @@
 
         this.id = answerData.id;
         this.answer = answerData.answer;
-        this.conclusion = answerData.conclusion;
         this.nextQuestionId = answerData.nextQuestionId;
         this.resultId = answerData.resultId;
+        this.isPositive = answerData.isPositive;
 
         this.getQuestion = function () {
           var _questionListFiltered = _.filter(this.questionList.list, function (question) {

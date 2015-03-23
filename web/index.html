@@ -11,6 +11,7 @@
     <script type="text/javascript" src="bower/angular-growl-v2/build/angular-growl.js"></script>
     <link rel="stylesheet" href="bower/angular-growl-v2/build/angular-growl.css"/>
 
+    <script type="text/javascript" src="js/questions.js"></script>
     <script type="text/javascript" src="js/ng-app.js"></script>
 </head>
 <body ng-app="ng-app">
@@ -25,18 +26,29 @@
     </nav>
     <div class="row" ng-controller="MainController">
         <div class="col-md-6 col-md-offset-3 ">
-            <div>
-                <input type="checkbox" id="show-answers" ng-model="showAnswers"/>
-                <label for="show-answers">Show my answers</label>
+            <div class="row" style="margin-bottom: 10px">
+                <div class="col-md-6">
+                    <input type="checkbox" id="show-answers" ng-model="showAnswers"/>
+                    <label for="show-answers">Show my answers</label>
+                </div>
+                <div class="col-md-6 pull-right" style="text-align: right">
+                    <button ng-click="restart(true)" class="btn btn-warning btn-sm">
+                        Restart
+                    </button>
+                </div>
             </div>
             <div ng-if="currentQuestion" class="well well-lg">
-                <div class="row">
+                <div class="row" style="text-align: center; margin: 50px auto;">
                     <div class="col-md-12">{{currentQuestion.question}}</div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <div ng-repeat="answer in currentQuestion.answers">
-                            <button ng-click="doAnswer(currentQuestion.id, answer)">
+                        <div ng-repeat="answer in currentQuestion.answers" class="col-md-6" style="text-align: center;">
+                            <button
+                                    ng-click="doAnswer(currentQuestion.id, answer)"
+                                    class="btn"
+                                    ng-class="{'btn-success':answer.isPositive, 'btn-danger':!answer.isPositive}"
+                                    style="min-width: 50px">
                                 {{answer.answer}}
                             </button>
                         </div>
@@ -48,7 +60,6 @@
                 <div class="col-md-12">
                     <div>Q.: {{answer.getQuestion().question}}</div>
                     <div>A.: {{answer.answer}}</div>
-                    <div>C.: {{answer.conclusion}}</div>
                 </div>
             </div>
         </div>
