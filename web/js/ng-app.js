@@ -15,79 +15,31 @@
       growlProvider.globalTimeToLive(3000);
     }])
     .controller('MainController', function ($scope, $http, growl, _, cy) {
+      $scope.showAnswers = true;
+      $scope.showGraph = true;
       $scope.questionList = undefined;
       $scope.currentQuestion = undefined;
       $scope.answers = [];
 
-      $scope.$watch('currentQuestion', function () {
-        var cyObject = cy({
-          container: document.getElementById('cy-container'),
-          style: cy.stylesheet()
-            .selector('node')
-            .css({
-              'content': 'data(id)'
-            })
-            .selector('edge')
-            .css({
-              'target-arrow-shape': 'triangle',
-              'width': 4,
-              'line-color': '#ddd',
-              'target-arrow-color': '#ddd'
-            })
-            .selector('.highlighted')
-            .css({
-              'background-color': '#61bffc',
-              'line-color': '#61bffc',
-              'target-arrow-color': '#61bffc',
-              'transition-property': 'background-color, line-color, target-arrow-color',
-              'transition-duration': '0.5s'
-            }),
-          layout: {
-            name: 'breadthfirst',
-            directed: true,
-            roots: '#a',
-            padding: 10
-          },
-          elements: {
-            nodes: [
-              {data: {id: 'a'}},
-              {data: {id: 'b'}},
-              {data: {id: 'c'}},
-              {data: {id: 'd'}},
-              {data: {id: 'e'}}
-            ],
-
-            edges: [
-              {data: {id: 'a"e', weight: 1, source: 'a', target: 'e'}},
-              {data: {id: 'ab', weight: 3, source: 'a', target: 'b'}},
-              {data: {id: 'be', weight: 4, source: 'b', target: 'e'}},
-              {data: {id: 'bc', weight: 5, source: 'b', target: 'c'}},
-              {data: {id: 'ce', weight: 6, source: 'c', target: 'e'}},
-              {data: {id: 'cd', weight: 2, source: 'c', target: 'd'}},
-              {data: {id: 'de', weight: 7, source: 'd', target: 'e'}}
-            ]
+      $scope.$watch('currentQuestion', function (newValue, oldValue) {
+        if (cyObject !== undefined) {
+          if (newValue !== undefined) {
+            cyObject.elements("[id='q" + newValue.id + "']").addClass('highlighted');
           }
-        });
 
-        var bfs = cyObject.elements().bfs('#a', function () {
-
-        }, true);
-
-        var i = 0;
-        var highlightNextEle = function(){
-          bfs.path[i].addClass('highlighted');
-
-          if( i < bfs.path.length ){
-            i++;
-            setTimeout(highlightNextEle, 1000);
+          if (newValue === undefined) {
+            var resultId = $scope.answers[$scope.answers.length - 1].getResult().id;
+            cyObject.edges("[id='q" + oldValue.id + "-r" + resultId + "']").addClass('highlighted');
+            cyObject.elements("[id='r" + resultId + "']").css({'background-color': 'brown'});
           }
-        };
 
-// kick off first highlight
-        highlightNextEle();
+          if (oldValue !== undefined && newValue !== undefined) {
+            cyObject.edges("[id='q" + oldValue.id + "-q" + newValue.id + "']").addClass('highlighted');
+          }
+        }
       });
 
-      var results;
+      var cyObject, results;
 
       $scope.getResult = function () {
         var lastAnswer = $scope.answers[$scope.answers.length - 1];
@@ -98,7 +50,87 @@
         withMessage = withMessage || false;
 
         $scope.answers = [];
+
         $scope.currentQuestion = $scope.questionList.getStartQuestion();
+
+        var cyConfig = {
+          zoomingEnabled: false,
+          panningEnabled: false,
+          container: document.getElementById('cy-container'),
+          style: cy.stylesheet()
+            .selector('edge')
+            .css({
+              'target-arrow-shape': 'triangle',
+              'width': 2
+            })
+            .selector('.highlighted')
+            .css({
+              'background-color': '#61bffc',
+              'line-color': '#61bffc',
+              'target-arrow-color': '#61bffc',
+              'transition-property': 'background-color, line-color, target-arrow-color',
+              'transition-duration': '0.5s'
+            }),
+          layout: {
+            name: 'preset',
+            directed: true,
+            padding: 10
+          }
+        };
+
+        cyConfig.elements = {};
+        cyConfig.elements.nodes = [];
+        cyConfig.elements.edges = [];
+
+        _.each(results, function (result) {
+          cyConfig.elements.nodes.push({
+            data: {id: 'r' + result.id},
+            css: {
+              'background-color': '#d9534f'
+            },
+            renderedPosition: result.position
+          });
+        });
+        _.each($scope.questionList.list, function (question, index) {
+          cyConfig.elements.nodes.push({
+            data: {id: 'q' + question.id},
+            renderedPosition: question.position,
+            classes: index === 0 ? 'highlighted' : ''
+          });
+          if (_.all(question.answers, function (answer) {
+              return answer.getNextQuestion() !== undefined;
+            })) {
+            _.each(question.answers, function (answer) {
+              cyConfig.elements.edges.push({
+                data: {
+                  id: 'q' + answer.getQuestion().id + '-q' + answer.getNextQuestion().id,
+                  source: 'q' + answer.getQuestion().id,
+                  target: 'q' + answer.getNextQuestion().id
+                },
+                css: {
+                  'line-color': answer.isPositive ? '#5cb85c' : '#d9534f',
+                  'target-arrow-color': answer.isPositive ? '#5cb85c' : '#d9534f'
+                }
+              });
+            });
+          } else {
+            _.each(question.answers, function (answer) {
+              cyConfig.elements.edges.push({
+                data: {
+                  id: 'q' + answer.getQuestion().id + '-r' + answer.getResult().id,
+                  source: 'q' + answer.getQuestion().id,
+                  target: 'r' + answer.getResult().id
+                },
+                css: {
+                  'line-color': answer.isPositive ? '#5cb85c' : '#d9534f',
+                  'target-arrow-color': answer.isPositive ? '#5cb85c' : '#d9534f'
+                }
+              });
+            });
+          }
+        });
+
+        cyObject = cy(cyConfig);
 
         if (withMessage) {
           growl.success('Restarted');
@@ -114,9 +146,15 @@
       generateQuestionList();
 
       function generateQuestionList() {
-        $scope.questionList = new QuestionList(data);
-        $scope.restart();
-        results = data.results;
+        $http.get('data/questions.json')
+          .success(function (data) {
+            $scope.questionList = new QuestionList(data);
+            results = data.results;
+            $scope.restart();
+          })
+          .error(function (data) {
+            growl.error('Cannot retrieve data with AJAX-request');
+          });
       }
 
       function QuestionList(questionsData) {
@@ -137,7 +175,7 @@
 
         this.id = questionData.id;
         this.question = questionData.question;
-        //this.answers = questionData.answers;
+        this.position = questionData.position;
         this.answers = _.map(questionData.answers, function (answerData) {
           return new Answer(answerData, this.questionList);
         }, this);
@@ -162,6 +200,7 @@
         this.answer = answerData.answer;
         this.nextQuestionId = answerData.nextQuestionId;
         this.resultId = answerData.resultId;
+        this.position = answerData.position;
         this.isPositive = answerData.isPositive;
 
         this.getQuestion = function () {
@@ -176,6 +215,10 @@
             id: this.nextQuestionId
           }, this);
         };
+
+        this.getResult = function () {
+          return _.findWhere(results, {id: this.resultId});
+        }
       }
     });
 })

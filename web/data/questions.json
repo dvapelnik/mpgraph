@@ -1,69 +1,69 @@
-var data = {
+{
   "questions": [
     {
       "id": 1, "question": "?", "answers": [
       {"id": 1, "answer": "+", "isPositive": true, "nextQuestionId": 2},
       {"id": 2, "answer": "-", "isPositive": false, "nextQuestionId": 3}
-    ]
+    ], "position": {"x": 327, "y": 29}
     },
     {
       "id": 2, "question": "?", "answers": [
       {"id": 3, "answer": "+", "isPositive": true, "nextQuestionId": 4},
       {"id": 4, "answer": "-", "isPositive": false, "nextQuestionId": 5}
-    ]
+    ], "position": {"x": 210, "y": 126}
     },
     {
       "id": 3, "question": "?", "answers": [
       {"id": 5, "answer": "+", "isPositive": true, "nextQuestionId": 5},
       {"id": 6, "answer": "-", "isPositive": false, "nextQuestionId": 6}
-    ]
+    ], "position": {"x": 406, "y": 103}
     },
     {
       "id": 4, "question": "?", "answers": [
       {"id": 20, "answer": "+", "isPositive": true, "nextQuestionId": 9},
       {"id": 7, "answer": "-", "isPositive": false, "nextQuestionId": 7}
-    ]
+    ], "position": {"x": 178, "y": 202}
     },
     {
       "id": 5, "question": "?", "answers": [
       {"id": 8, "answer": "+", "isPositive": true, "nextQuestionId": 7},
       {"id": 9, "answer": "-", "isPositive": false, "nextQuestionId": 8}
-    ]
+    ], "position": {"x": 325, "y": 165}
     },
     {
       "id": 6, "question": "?", "answers": [
       {"id": 10, "answer": "+", "isPositive": true, "nextQuestionId": 8},
       {"id": 15, "answer": "-", "isPositive": false, "nextQuestionId": 10}
-    ]
+    ], "position": {"x": 471, "y": 195}
     },
     {
       "id": 7, "question": "?", "answers": [
       {"id": 11, "answer": "+", "isPositive": true, "nextQuestionId": 9},
       {"id": 12, "answer": "-", "isPositive": false, "nextQuestionId": 10}
-    ]
+    ], "position": {"x": 279, "y": 338}
     },
     {
       "id": 8, "question": "?", "answers": [
       {"id": 13, "answer": "+", "isPositive": true, "nextQuestionId": 7},
       {"id": 14, "answer": "-", "isPositive": false, "nextQuestionId": 10}
-    ]
+    ], "position": {"x": 392, "y": 290}
     },
     {
       "id": 9, "question": "?", "answers": [
       {"id": 16, "answer": "+", "isPositive": true, "resultId": 1},
       {"id": 17, "answer": "-", "isPositive": false, "resultId": 2}
-    ]
+    ], "position": {"x": 177, "y": 376}
     },
     {
       "id": 10, "question": "?", "answers": [
       {"id": 18, "answer": "+", "isPositive": true, "resultId": 2},
       {"id": 19, "answer": "-", "isPositive": false, "resultId": 3}
-    ]
+    ], "position": {"x": 428, "y": 394}
     }
   ],
   "results": [
-    {"id": 1, "result": "Result 1"},
-    {"id": 2, "result": "Result 2"},
-    {"id": 3, "result": "Result 3"}
+    {"id": 1, "result": "Result 1", "position": {"x": 155, "y": 473}},
+    {"id": 2, "result": "Result 2", "position": {"x": 310, "y": 467}},
+    {"id": 3, "result": "Result 3", "position": {"x": 489, "y": 467}}
   ]
-};
+}

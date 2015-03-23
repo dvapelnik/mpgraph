@@ -26,26 +26,26 @@
             </div>
         </div>
     </nav>
-    <div class="row">
-        <div class="col-md-6" style="height: 500px">
-            <div id="cy-container" style="height: 100%; width: 100%; position: absolute; left: 0; top: 0;"></div>
-        </div>
+    <div class="row" ng-controller="MainController">
         <div class="col-md-6">
-            <div class="row" ng-controller="MainController">
+            <div class="row">
                 <div class="col-md-10 col-md-offset-1">
                     <div class="row" style="margin-bottom: 10px">
                         <div class="col-md-6">
                             <input type="checkbox" id="show-answers" ng-model="showAnswers"/>
                             <label for="show-answers">Show my answers</label>
+                            <br/>
+                            <input type="checkbox" id="show-graph" ng-model="showGraph"/>
+                            <label for="show-graph">Show graph</label>
                         </div>
-                        <div class="col-md-6 pull-right" style="text-align: right">
+                        <div class="col-md-6 pull-right" style="text-align: right; padding-top: 10px;">
                             <button ng-click="restart(true)" class="btn btn-warning btn-sm">
                                 Restart
                             </button>
                         </div>
                     </div>
                     <div ng-if="currentQuestion" class="well well-lg">
-                        <div class="row" style="text-align: center; margin: 50px auto;">
+                        <div class="row" style="text-align: center; margin: 20px auto;">
                             <div class="col-md-12">{{currentQuestion.question}}</div>
                         </div>
                         <div class="row">
@@ -72,6 +72,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="col-md-6" style="height: 500px" ng-show="showGraph">
+            <div id="cy-container" style="height: 100%; width: 100%; position: absolute; left: 0; top: 0;"></div>
         </div>
     </div>
 
