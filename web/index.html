@@ -3,19 +3,19 @@
 <head>
     <title>Multi-parent graph question</title>
 
-    <link rel="stylesheet" href="/bower/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="bower/bootstrap/dist/css/bootstrap.css"/>
 
-    <script type="text/javascript" src="/bower/angular/angular.js"></script>
-    <script type="text/javascript" src="/bower/underscore/underscore.js"></script>
+    <script type="text/javascript" src="bower/angular/angular.js"></script>
+    <script type="text/javascript" src="bower/underscore/underscore.js"></script>
 
-    <script type="text/javascript" src="/bower/angular-growl-v2/build/angular-growl.js"></script>
-    <link rel="stylesheet" href="/bower/angular-growl-v2/build/angular-growl.css"/>
+    <script type="text/javascript" src="bower/angular-growl-v2/build/angular-growl.js"></script>
+    <link rel="stylesheet" href="bower/angular-growl-v2/build/angular-growl.css"/>
 
-    <script type="text/javascript" src="/js/ng-app.js"></script>
+    <script type="text/javascript" src="js/ng-app.js"></script>
 </head>
 <body ng-app="ng-app">
 <div growl></div>
-<div class="container" style="margin-top: 20px;" ng-controller="MainController">
+<div class="container" style="margin-top: 20px;">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -23,8 +23,12 @@
             </div>
         </div>
     </nav>
-    <div class="row">
+    <div class="row" ng-controller="MainController">
         <div class="col-md-6 col-md-offset-3 ">
+            <div>
+                <input type="checkbox" id="show-answers" ng-model="showAnswers"/>
+                <label for="show-answers">Show my answers</label>
+            </div>
             <div ng-if="currentQuestion" class="well well-lg">
                 <div class="row">
                     <div class="col-md-12">{{currentQuestion.question}}</div>
@@ -39,7 +43,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row well well-sm" ng-repeat="answer in answers">
+            <div ng-if="getResult()" class="well well-lg">{{getResult().result}}</div>
+            <div class="row well well-sm" ng-repeat="answer in answers" ng-if="showAnswers">
                 <div class="col-md-12">
                     <div>Q.: {{answer.getQuestion().question}}</div>
                     <div>A.: {{answer.answer}}</div>

@@ -10,10 +10,16 @@
       $scope.currentQuestion = undefined;
       $scope.answers = [];
 
+      var results;
+
+      $scope.getResult = function () {
+        var lastAnswer = $scope.answers[$scope.answers.length - 1];
+        return lastAnswer && lastAnswer.resultId ? _.findWhere(results, {id: lastAnswer.resultId}) : false;
+      };
+
       $scope.doAnswer = function (questionId, answer) {
         $scope.currentQuestion.answer = answer;
         $scope.answers.push(answer);
-
         $scope.currentQuestion = $scope.currentQuestion.getNextQuestion();
       };
 
@@ -24,8 +30,7 @@
           .success(function (data, status, headers, config) {
             $scope.questionList = new QuestionList(data);
             $scope.currentQuestion = $scope.questionList.getStartQuestion();
-
-            console.log($scope.currentQuestion);
+            results = data.results;
           })
           .error(function (data, status, headers, config) {
             growl.error('Cannot retrieve questions', {
@@ -77,6 +82,7 @@
         this.answer = answerData.answer;
         this.conclusion = answerData.conclusion;
         this.nextQuestionId = answerData.nextQuestionId;
+        this.resultId = answerData.resultId;
 
         this.getQuestion = function () {
           var _questionListFiltered = _.filter(this.questionList.list, function (question) {
