@@ -24,6 +24,8 @@
           .success(function (data, status, headers, config) {
             $scope.questionList = new QuestionList(data);
             $scope.currentQuestion = $scope.questionList.getStartQuestion();
+
+            console.log($scope.currentQuestion);
           })
           .error(function (data, status, headers, config) {
             growl.error('Cannot retrieve questions', {
@@ -50,18 +52,17 @@
 
         this.id = questionData.id;
         this.question = questionData.question;
-        this.answers = questionData.answers;
-        //this.answers = _.map(questionData.answers, function (answerData) {
-        //  return new Answer(answerData, this.questionList);
-        //}, this);
+        //this.answers = questionData.answers;
+        this.answers = _.map(questionData.answers, function (answerData) {
+          return new Answer(answerData, this.questionList);
+        }, this);
 
         this.answer = undefined;
+
         this.getNextQuestion = function () {
           if (this.answer === undefined) return false;
 
-          return _.findWhere(this.questionList.list, {
-            id: this.answer.nextQuestionId
-          });
+          return this.answer.getNextQuestion();
         };
 
         this.hasNextQuestion = function () {
@@ -74,14 +75,21 @@
 
         this.id = answerData.id;
         this.answer = answerData.answer;
-        var questions = _.find(questionList, function (question) {
-          return !!(_.findWhere(question.answers, {id: answerData.id}));
-        });
-        console.log(questions);
-        this.question = (questions && questions.length) > 0 ? questions[0] : undefined;
-        this.nextQuestion = _.findWhere(questionList, {
-          id: answerData.nextQuestionId
-        });
+        this.conclusion = answerData.conclusion;
+        this.nextQuestionId = answerData.nextQuestionId;
+
+        this.getQuestion = function () {
+          var _questionListFiltered = _.filter(this.questionList.list, function (question) {
+            return !!_.findWhere(question.answers, {id: this.id})
+          }, this);
+          return _questionListFiltered ? _questionListFiltered[0] : false;
+        };
+
+        this.getNextQuestion = function () {
+          return _.findWhere(this.questionList.list, {
+            id: this.nextQuestionId
+          }, this);
+        };
       }
     });
 })(window.angular, window._);

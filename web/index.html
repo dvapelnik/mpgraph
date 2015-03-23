@@ -38,12 +38,12 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="row well well-sm" ng-repeat="answer in answers">
                 <div class="col-md-12">
-                    <div>Q.: {{answer.question.question}}</div>
+                    <div>Q.: {{answer.getQuestion().question}}</div>
                     <div>A.: {{answer.answer}}</div>
+                    <div>C.: {{answer.conclusion}}</div>
                 </div>
             </div>
         </div>
