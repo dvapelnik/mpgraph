@@ -193,10 +193,6 @@
 
           return this.answer.getNextQuestion();
         };
-
-        this.hasNextQuestion = function () {
-          return this.answer && this.answer.nextQuestionId !== undefined;
-        };
       }
 
       function Answer(answerData, questionList) {
