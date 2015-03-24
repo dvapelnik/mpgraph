@@ -42,11 +42,8 @@
                         <div class="col-md-6">
                             <input type="checkbox" id="show-answers" ng-model="showAnswers"/>
                             <label for="show-answers">Отображать мои ответы</label>
-                            <br/>
-                            <input type="checkbox" id="show-graph" ng-model="showGraph"/>
-                            <label for="show-graph">Отобразить граф</label>
                         </div>
-                        <div class="col-md-6 pull-right" style="text-align: right; padding-top: 10px;">
+                        <div class="col-md-6 pull-right" style="text-align: right;">
                             <button ng-click="restart(true)" class="btn btn-warning btn-sm">
                                 Перезапустить
                             </button>
@@ -81,7 +78,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6" style="height: 500px" ng-show="showGraph">
+        <div class="col-md-6" style="height: 500px">
             <div id="cy-container" style="height: 100%; width: 100%; position: absolute; left: 0; top: 0;"></div>
         </div>
     </div>

@@ -31,7 +31,6 @@
     })
     .controller('MainController', function ($scope, $http, growl, _, cy) {
       $scope.showAnswers = true;
-      $scope.showGraph = true;
       $scope.questionList = undefined;
       $scope.currentQuestion = undefined;
       $scope.answers = [];
