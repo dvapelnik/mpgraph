@@ -35,6 +35,8 @@
       $scope.currentQuestion = undefined;
       $scope.answers = [];
 
+      // следим за изменением текущего вопроса
+      // для того, чтобы подсвечивать его в графе
       $scope.$watch('currentQuestion', function (newValue, oldValue) {
         if (cyObject !== undefined) {
           if (newValue !== undefined) {
@@ -67,6 +69,7 @@
 
         $scope.currentQuestion = $scope.questionList.getStartQuestion();
 
+        // конфиг для отображения графа
         var cyConfig = {
           zoomingEnabled: false,
           panningEnabled: false,
@@ -96,6 +99,7 @@
         cyConfig.elements.nodes = [];
         cyConfig.elements.edges = [];
 
+        // добавляем ноды - результаты (они будут внизу)
         _.each(results, function (result) {
           cyConfig.elements.nodes.push({
             data: {id: 'r' + result.id},
@@ -106,7 +110,9 @@
           });
         });
 
+        //добавляем вопросы и ответы
         _.each($scope.questionList.list, function (question, index) {
+          // вопросы
           cyConfig.elements.nodes.push({
             data: {id: 'q' + question.id},
             renderedPosition: question.position,
@@ -117,6 +123,7 @@
             return answer.getNextQuestion() !== undefined;
           });
 
+          // ответы - ребра графа
           _.each(question.answers, function (answer) {
             var sourceId = 'q' + answer.getQuestion().id;
             var targetId = isNotLastAnswer ?
@@ -163,31 +170,42 @@
           });
       }
 
+      // мы имеем список вопросов. каждый вопрос имеет два ответа (Answer)
       function QuestionList(questionsData) {
+        // спиток вопросов
         this.list = [];
 
+        // получаем первый вопрос из опроса
         this.getStartQuestion = function () {
           return this.list[0];
         };
 
+        // заполняем список вопросов вопросами
         _.each(questionsData.questions, function (question) {
           var questionObj = new Question(question, this);
           this.list.push(questionObj);
         }, this);
       }
 
+      // вопрос
       function Question(questionData, questionList) {
         this.questionList = questionList;
 
+        // айдишка вопроса
         this.id = questionData.id;
+        // сам вопрос
         this.question = questionData.question;
+        // положение в графе
         this.position = questionData.position;
+        // ответы (список ответов)
         this.answers = _.map(questionData.answers, function (answerData) {
           return new Answer(answerData, this.questionList);
         }, this);
 
+        // ответ на вопрос, сделанный пользователем
         this.answer = undefined;
 
+        // получить следующий вопрос после ответа на текущий пользователем
         this.getNextQuestion = function () {
           if (this.answer === undefined) return false;
 
@@ -195,16 +213,25 @@
         };
       }
 
+      // ответ на вопрос
       function Answer(answerData, questionList) {
+        // все вопросы
         this.questionList = questionList;
 
+        // айдишка ответа
         this.id = answerData.id;
+        // ответ
         this.answer = answerData.answer;
+        // айдишка следующего вопроса (если есть)
         this.nextQuestionId = answerData.nextQuestionId;
+        // айдишка результат (если есть)
         this.resultId = answerData.resultId;
+        // положение ответа
         this.position = answerData.position;
+        // позитивный ли это ответ (нужно для раскрашивания)
         this.isPositive = answerData.isPositive;
 
+        // получить вопрос, который ведет к этому ответу
         this.getQuestion = function () {
           var _questionListFiltered = _.filter(this.questionList.list, function (question) {
             return !!_.findWhere(question.answers, {id: this.id})
@@ -212,12 +239,14 @@
           return _questionListFiltered ? _questionListFiltered[0] : false;
         };
 
+        // получить следующий вопрос (если есть)
         this.getNextQuestion = function () {
           return _.findWhere(this.questionList.list, {
             id: this.nextQuestionId
           }, this);
         };
 
+        // получить результат (если есть)
         this.getResult = function () {
           return _.findWhere(results, {id: this.resultId});
         }
